@@ -17,12 +17,18 @@ st.markdown("""
     }
 
     .main-header {
-        background: linear-gradient(135deg, #b3a1fe, #635494);
-        padding: 50px 20px;
+        background-color: #b3a1ff !important; /* เปลี่ยนเป็นสีม่วงอ่อน (ใกล้เคียงโค้ดเดิมที่คุณให้มา) */
+        background-image: none !important;    /* ยกเลิก Gradient เดิม */
+        color: #000000 !important;            /* เปลี่ยนสีตัวอักษรเป็นสีดำ */
+        padding: 40px 20px;
         border-radius: 0 0 40px 40px;
-        color: white;
         text-align: center;
-        margin-bottom: 30px;
+    }
+
+    /* บังคับให้ h1 และ p ภายใน Header เป็นสีดำด้วย */
+    .main-header h1, .main-header p {
+        color: #000000 !important;
+    }
     }
 
     /* ปรับแต่งหัวข้อในส่วนระบุข้อมูล */
@@ -68,7 +74,7 @@ emergency_fund = expenses * months
 
 # แสดงผลลัพธ์
 st.markdown(f"""
-    <div class="result-card" style="background-color: #b1ebba; padding: 20px; border-radius: 10px;">
+    <div class="result-card" style="background-color: #b3a1ff; padding: 20px; border-radius: 10px;">
         <p style="margin-bottom: 0; color: #0d101a; font-weight: 400;">เงินสำรองที่ควรมี</p>
         <div class="result-value">{emergency_fund:,.0f}</div>
         <p style="margin-top: 0; color: #212121; font-weight: 400;">บาท</p>

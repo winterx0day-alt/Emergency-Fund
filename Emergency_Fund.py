@@ -1,13 +1,12 @@
 import streamlit as st
+import math
 
 st.set_page_config(page_title="Emergency Fund Calculator", layout="centered")
 
 st.markdown("""
     <style>
-    /* 1. ดึงฟอนต์ Prompt จาก Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap');
 
-    /* 2. บังคับใช้ Prompt กับทุกส่วน */
     html, body, [class*="st-"], .stMarkdown, h3, label, input, select {
         font-family: 'Prompt', sans-serif !important;
     }
@@ -18,7 +17,6 @@ st.markdown("""
 
     .main-header {
         background-color: #b3a1ff !important;
-        background-image: none !important;
         color: #000000 !important;
         padding: 40px 20px;
         border-radius: 40px 40px 40px 40px;
@@ -36,7 +34,6 @@ st.markdown("""
         border-radius: 20px;
         text-align: center;
         margin-top: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
 
     .plan-card {
@@ -45,14 +42,12 @@ st.markdown("""
         border-radius: 20px;
         text-align: center;
         margin-top: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
 
     .result-value {
         color: #0d101a;
         font-size: 2.8rem;
         font-weight: 700;
-        line-height: 1.2;
     }
 
     .plan-value {
@@ -63,54 +58,55 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# ส่วนหัว
 st.markdown("""
     <div class="main-header">
         <h1>Emergency Fund</h1>
-        <p>คำนวณเงินสำรองเพื่อความอุ่นใจ</p>
+        <p>คำนวณระยะเวลาการออมเพื่อเป้าหมาย</p>
     </div>
     """, unsafe_allow_html=True)
 
-# ส่วนอินพุตข้อมูลพื้นฐาน
 with st.container():
     st.subheader("ระบุข้อมูลทางการเงิน")
-    # ปรับค่าเริ่มต้นตามฐานเงินเดือนจริงของคุณ
-    income = st.number_input("รายได้ต่อเดือน (บาท)", min_value=0, value=32585, step=500)
+    income = st.number_input("รายได้ต่อเดือน (บาท)", min_value=0, value=32585, step=500) #
     expenses = st.number_input("รายจ่ายต่อเดือน (บาท)", min_value=0, value=15000, step=500)
-    months = st.selectbox("แผนสำรอง (กี่เดือน?)", [3, 6, 12], index=1)
+    months_multiplier = st.selectbox("เป้าหมายเงินสำรอง (กี่เดือนของรายจ่าย?)", [3, 6, 12], index=1)
 
-# ส่วนอินพุตแผนการออม (เพิ่มใหม่)
 st.markdown("---")
-st.subheader("แผนการเก็บเงิน")
-target_period = st.slider("ต้องการเก็บให้ครบภายในกี่เดือน?", min_value=1, max_value=48, value=12)
+st.subheader("ความสามารถในการออม")
+monthly_savings = st.number_input("จำนวนเงินที่ต้องการออมต่อเดือน (บาท)", min_value=1, value=5000, step=500)
 
-# คำนวณเงินสำรองและเงินที่ต้องเก็บต่อเดือน
-emergency_fund = expenses * months
-monthly_saving_target = emergency_fund / target_period
+# คำนวณ
+emergency_fund_goal = expenses * months_multiplier
+if monthly_savings > 0:
+    months_to_reach = math.ceil(emergency_fund_goal / monthly_savings)
+    # คิดเป็นกี่ % ของรายได้ต่อเดือน
+    percent_of_income = (monthly_savings / income) * 100
+else:
+    months_to_reach = 0
+    percent_of_income = 0
 
-# แสดงผลลัพธ์: เงินสำรองที่ควรมี
+# แสดงผลเป้าหมายรวม
 st.markdown(f"""
     <div class="result-card">
-        <p style="margin-bottom: 0; color: #0d101a; font-weight: 400;">เงินสำรองรวมที่ต้องมี</p>
-        <div class="result-value">{emergency_fund:,.0f}</div>
+        <p style="margin-bottom: 0; color: #0d101a; font-weight: 400;">เป้าหมายเงินสำรองทั้งหมด</p>
+        <div class="result-value">{emergency_fund_goal:,.0f}</div>
         <p style="margin-top: 0; color: #212121; font-weight: 400;">บาท</p>
     </div>
     """, unsafe_allow_html=True)
 
-# แสดงผลลัพธ์: ยอดที่ต้องเก็บต่อเดือน (เพิ่มใหม่)
+# แสดงผลระยะเวลาที่ต้องใช้
 st.markdown(f"""
     <div class="plan-card">
-        <p style="margin-bottom: 0; color: #0d101a; font-weight: 400;">ต้องออมเงินเดือนละ</p>
-        <div class="plan-value">{monthly_saving_target:,.2f}</div>
-        <p style="margin-top: 0; color: #212121; font-weight: 400;">บาท / เดือน (เป็นเวลา {target_period} เดือน)</p>
+        <p style="margin-bottom: 0; color: #0d101a; font-weight: 400;">ต้องใช้เวลาออมทั้งหมด</p>
+        <div class="plan-value">{months_to_reach} เดือน</div>
+        <p style="margin-top: 0; color: #212121; font-weight: 400;">ด้วยเงินออม {percent_of_income:.1f}% ของรายได้ต่อเดือน</p>
     </div>
     """, unsafe_allow_html=True)
 
-# แจ้งเตือนสถานะความยากง่ายในการออม
-saving_ratio = (monthly_saving_target / income) * 100
-if saving_ratio > 30:
-    st.warning(f"ยอดออมต่อเดือนสูงถึง {saving_ratio:.1f}% ของรายได้ อาจจะตึงเกินไป ลองขยายเวลาเก็บเงินดูครับ")
-else:
-    st.success(f"ยอดออมต่อเดือนคิดเป็น {saving_ratio:.1f}% ของรายได้ เป็นแผนที่ทำได้จริง สู้ๆ ครับ!")
+# ส่วนวิเคราะห์เพิ่มเติม
+if percent_of_income > 40:
+    st.warning(f"ยอดออม {percent_of_income:.1f}% อาจจะตึงเกินไปสำหรับการจัดการค่าใช้จ่ายส่วนอื่น")
+elif percent_of_income > 0:
+    st.success(f"การออมเดือนละ {monthly_savings:,.0f} บาท เป็นจุดเริ่มต้นที่ดีสู่ความมั่นคงทางการเงิน")
 
-st.info("เป้าหมายนี้ช่วยให้คุณมั่นใจในการใช้ชีวิตและการวางแผนท่องเที่ยวในอนาคต")
+st.info("การออมอย่างสม่ำเสมอในบัญชีดอกเบี้ยสูง เช่น Dime! จะช่วยให้ถึงเป้าหมายได้เร็วขึ้น")

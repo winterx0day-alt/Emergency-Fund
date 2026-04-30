@@ -17,7 +17,7 @@ st.markdown("""
     }
 
     .main-header {
-        background: linear-gradient(135deg, #2596be, #acbaee);
+        background: linear-gradient(135deg, #b3a1fe, #635494);
         padding: 50px 20px;
         border-radius: 0 0 40px 40px;
         color: white;
@@ -32,7 +32,7 @@ st.markdown("""
     }
 
     .result-card {
-        background-color: #a7ebd2;
+        background-color: #b1ebba;
         padding: 25px;
         border-radius: 25px;
         text-align: center;
@@ -40,7 +40,7 @@ st.markdown("""
     }
 
     .result-value {
-        color: #2596be;
+        color: #0d101a;
         font-size: 3rem;
         font-weight: 700;
         font-family: 'Prompt', sans-serif !important;
@@ -59,8 +59,8 @@ st.markdown("""
 # ส่วนอินพุต - ตอนนี้จะเป็นฟอนต์ Prompt ทั้งหมด
 with st.container():
     st.subheader("ระบุข้อมูลทางการเงิน")
-    income = st.number_input("รายได้ต่อเดือน (บาท)", min_value=0, value=32585, step=500)
-    expenses = st.number_input("รายจ่ายต่อเดือน (บาท)", min_value=0, value=15000, step=500)
+    income = st.number_input("รายได้ต่อเดือน (บาท)", min_value=0, value=15000, step=500)
+    expenses = st.number_input("รายจ่ายต่อเดือน (บาท)", min_value=0, value=8000, step=500)
     months = st.selectbox("แผนสำรอง (กี่เดือน?)", [3, 6, 12], index=1)
 
 # คำนวณ
@@ -68,9 +68,11 @@ emergency_fund = expenses * months
 
 # แสดงผลลัพธ์
 st.markdown(f"""
-    <div class="result-card">
-        <p style="margin-bottom: 0; color: #2d3436; font-weight: 400;">เงินสำรองที่ควรมี</p>
-        <div class="result-value">{emergency_fund:,.2f}</div>
-        <p style="margin-top: 0; color: #636e72; font-weight: 400;">บาท</p>
+    <div class="result-card" style="background-color: #b1ebba; padding: 20px; border-radius: 10px;">
+        <p style="margin-bottom: 0; color: #0d101a; font-weight: 400;">เงินสำรองที่ควรมี</p>
+        <div class="result-value">{emergency_fund:,.0f}</div>
+        <p style="margin-top: 0; color: #212121; font-weight: 400;">บาท</p>
     </div>
     """, unsafe_allow_html=True)
+
+st.info(f"เป้าหมายนี้ช่วยให้คุณมั่นใจในการใช้ชีวิตและการวางแผนท่องเที่ยวในอนาคต")

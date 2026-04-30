@@ -6,28 +6,55 @@ st.set_page_config(page_title="Emergency Fund Calculator", layout="centered")
 # แก้ไข Parameter จาก unsafe_allow_key_init เป็น unsafe_allow_html
 st.markdown("""
     <style>
+    /* 1. เปลี่ยน URL เป็นชื่อฟอนต์ที่เลือก (เช่น Prompt) */
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap');
+
+    /* 2. เปลี่ยนชื่อฟอนต์ใน font-family */
+    html, body, [class*="st-"], .main-header h1, .main-header p {
+        font-family: 'Prompt', sans-serif !important;
+    }
+
     .stApp {
         background-color: #f4f7f9;
     }
+
     .main-header {
         background: linear-gradient(135deg, #2596be, #acbaee);
-        padding: 40px;
+        padding: 50px 20px;
         border-radius: 0 0 40px 40px;
         color: white;
         text-align: center;
         margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
+
+    .main-header h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: white !important;
+    }
+
+    .main-header p {
+        font-size: 1.1rem;
+        font-weight: 300;
+        opacity: 0.9;
+        color: white !important;
+    }
+
     .result-card {
         background-color: #a7ebd2;
         padding: 25px;
-        border-radius: 20px;
+        border-radius: 25px;
         text-align: center;
         margin-top: 20px;
+        border: 2px solid #ffffff;
     }
+
     .result-value {
         color: #2596be;
-        font-size: 2.5rem;
-        font-weight: bold;
+        font-size: 3rem;
+        font-weight: 700;
     }
     </style>
     """, unsafe_allow_html=True)
